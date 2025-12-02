@@ -2,7 +2,7 @@ from ucimlrepo import fetch_ucirepo
 
 
 class Test:
-    # fetch dataset
+    # fetch datasetssdqd
     optical_recognition_of_handwritten_digits = fetch_ucirepo(id=80)
 
     # data (as pandas dataframes)
