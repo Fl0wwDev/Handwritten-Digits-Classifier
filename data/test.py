@@ -10,6 +10,5 @@ y = optical_recognition_of_handwritten_digits.data.targets
 
 # metadata
 print(optical_recognition_of_handwritten_digits.metadata)
-
 # variable information
 print(optical_recognition_of_handwritten_digits.variables)
