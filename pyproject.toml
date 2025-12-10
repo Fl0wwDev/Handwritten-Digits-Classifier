@@ -1,0 +1,31 @@
+[project]
+name = "handwritten-digits-classifier"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "certifi==2025.11.12",
+    "cfgv==3.5.0",
+    "charset-normalizer==3.4.4",
+    "distlib==0.4.0",
+    "docopt==0.6.2",
+    "filelock==3.20.0",
+    "identify==2.6.15",
+    "idna==3.11",
+    "nodeenv==1.9.1",
+    "numpy==2.3.5",
+    "pandas==2.3.3",
+    "platformdirs==4.5.0",
+    "pre-commit==4.5.0",
+    "python-dateutil==2.9.0.post0",
+    "pytz==2025.2",
+    "pyyaml==6.0.3",
+    "requests==2.32.5",
+    "six==1.17.0",
+    "tzdata==2025.2",
+    "ucimlrepo==0.0.7",
+    "urllib3==2.5.0",
+    "virtualenv==20.35.4",
+    "yarg==0.1.10",
+]
