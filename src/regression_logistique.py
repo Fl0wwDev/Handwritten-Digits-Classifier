@@ -1,5 +1,6 @@
 from descente_stochastique import GradientDescent
 from sklearn.datasets import load_digits
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,6 +8,10 @@ digits = load_digits()
 # Visualisation d'un chiffre du dataset des chiffres manuscrits
 # plt.matshow(digits.images[1], cmap='gray')
 # plt.show()
+
+# Normalize data
+scaler = StandardScaler()
+x_normalized = scaler.fit_transform(digits.data)
 
 def sigmoid(z: np.ndarray) -> np.ndarray:
     return 1 / (1 + np.exp(-z))
@@ -20,6 +25,10 @@ def gradient_descent_update(params: np.ndarray, data: tuple) -> tuple[np.ndarray
     sigma = sigmoid(np.dot(x, weights) + bias)
     dW = 1/m * np.dot(x.T, (sigma - y))
     db = 1/m * np.sum(sigma - y)
+    
+    # Add L2 regularization (lambda=0.01)
+    lambda_reg = 0.01
+    dW += lambda_reg * weights
     
     return np.concatenate([dW, [db]]), None
 
@@ -38,7 +47,7 @@ all_biases = []
 for digit in range(10):
     print(f"Entraînement pour le chiffre {digit}...")
     y_binary = (digits.target == digit).astype(int)
-    weights, bias = optimize(digits.data, y_binary)
+    weights, bias = optimize(x_normalized, y_binary)
     all_weights.append(weights)
     all_biases.append(bias)
 
@@ -47,6 +56,10 @@ def predict(x: np.ndarray, all_weights: list, all_biases: list) -> np.ndarray:
     probabilities = np.array(probabilities).T
     return np.argmax(probabilities, axis=1)
 
-predictions = predict(digits.data, all_weights, all_biases)
+predictions = predict(x_normalized, all_weights, all_biases)
 accuracy = np.mean(predictions == digits.target)
 print(f"\nPrécision: {accuracy * 100:.2f}%")
+
+# Dans la première version de mon code, quand je comparais avec sklearn, j'avais une précision de 66% contre 99%
+# j'ai donc commencé par rajouter un StandardScaler pour normaliser les données, ce qui a permis d'atteindre 91%
+# Ensuite, j'ai ajouté une régularisation L2 dans le calcul du gradient, ce qui a permis d'atteindre 97%
