@@ -42,26 +42,3 @@ for i, idx in enumerate(errors):
     axes[i].axis('off')
 plt.suptitle('Exemples de prédictions erronées')
 plt.show()
-
-# Analyse des résultats (inchangée)
-print("\nAnalyse des résultats:")
-print("- Influence des paramètres:")
-print("  - Learning rate (0.1): Trop élevé peut diverger, trop bas ralentit la convergence. Ici, stable mais pourrait être optimisé (e.g., 0.01).")
-print("  - Batch size (32): Mini-batch accélère vs. full batch, mais peut introduire du bruit. Testé avec 64 pour stabilité.")
-print("  - Régularisation L2 (0.01): Réduit l'overfitting, améliore de 91% à 97%. Sans, risque de surapprentissage.")
-print("  - Iterations (1000): Suffisant pour convergence, mais epsilon=1e-6 peut arrêter tôt si gradient faible.")
-
-print("\n- Interprétation des coefficients:")
-print("  - Coefficients positifs/negatifs indiquent pixels importants pour la classe (e.g., pour 0, pixels centraux positifs).")
-print("  - Heatmap montre que le modèle apprend des patterns locaux, similaires à scikit-learn mais moins raffiné.")
-
-print("\n- Explications des erreurs:")
-print("  - Erreurs sur chiffres similaires (e.g., 4 et 9, 3 et 8) dues à similarités visuelles.")
-print("  - Bruit dans les données (pixels mal échantillonnés) ou manque de données d'entraînement.")
-print("  - Notre modèle atteint 97% vs. 99% de scikit-learn car GD basique vs. solvers avancés (lbfgs).")
-
-print("\n- Réflexion sur le travail:")
-print("  - Difficultés: Implémentation from-scratch (One-vs-Rest, gradient), débogage de descente_stochastique.py.")
-print("  - Limites: Pas de validation croisée, optimisation manuelle des hyperparamètres, sensibilité aux initialisations.")
-print("  - Apports: Compréhension profonde des mécanismes (sigmoid, gradient), base pour extensions (CNN, etc.).")
-print("  - Améliorations possibles: Ajouter early stopping, tester autres régularisations, ou intégrer dans un pipeline ML.")
