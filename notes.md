@@ -25,9 +25,9 @@
 
 
 # Sources:
-https://scikit-learn.org/0.17/modules/generated/sklearn.datasets.load_digits.html
-https://stackoverflow.com/questions/3823752/display-image-as-grayscale (bug affichage)
-https://www.youtube.com/watch?v=2ztuQKtW7So
-cours
-td5 (ex 2 regression linéaire)
-doc matplotlib
+- https://scikit-learn.org/0.17/modules/generated/sklearn.datasets.load_digits.html
+- https://stackoverflow.com/questions/3823752/display-image-as-grayscale (bug affichage)
+- https://www.youtube.com/watch?v=2ztuQKtW7So
+-cours
+- td5 (ex 2 regression linéaire)
+- doc matplotlib
