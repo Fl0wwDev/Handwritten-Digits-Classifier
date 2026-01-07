@@ -42,3 +42,9 @@ for i, idx in enumerate(errors):
     axes[i].axis('off')
 plt.suptitle('Exemples de prédictions erronées')
 plt.show()
+
+'''Pour la réponse à cette question: 
+- analyser les résultats obtenus (influence des paramètres, interprétation des coefficients appris, proposition
+d’explications des erreurs etc.) et prendre du recul sur le travail effectué (réflexion, difficultés, limites etc.)
+
+Consulter le rapport écrit.'''
