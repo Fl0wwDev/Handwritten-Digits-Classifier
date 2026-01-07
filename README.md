@@ -4,14 +4,45 @@ From-scratch implementation of a multiclass Logistic Regression classifier on th
 
 # Implémenter from scratch une régression logistique
 
-# Install et gg
+## Installation
 
+We recommend using `uv` for dependency management. If you prefer `pip`, see the alternative below.
+
+### Using uv (Recommended)
+
+#### Manual Installation
+Install uv
+
+**Unix/macOS:**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows:**
+```powershell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+#### Sync dependencies
 ```bash
 uv sync
 ```
 
-## Pour lancer les scripts
+#### Run the project
+```bash
+uv run src/main.py
+```
+
+### Using pip (Alternative)
+
+If you don't want to use uv, you can install dependencies with pip:
 
 ```bash
-uv run main.py
+pip install -r requirements.txt
+```
+
+Then run the project directly:
+
+```bash
+python src/main.py
 ```
