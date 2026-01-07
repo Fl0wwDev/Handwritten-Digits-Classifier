@@ -80,5 +80,5 @@ if __name__ == "__main__":
     model = LogisticRegressionCustom()
     model.fit()
     accuracy = model.get_accuracy()
-    print(f"Accuracy of custom Logistic Regression: {accuracy * 100:.2f}%")
+    print(f"Précision du modèle from-scratch: {accuracy * 100:.2f}%")
     model.show_predictions_plt()

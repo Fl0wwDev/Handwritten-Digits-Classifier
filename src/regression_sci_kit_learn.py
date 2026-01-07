@@ -40,5 +40,5 @@ class LogisticRegressionSklearn:
 if __name__ == "__main__":
     model = LogisticRegressionSklearn()
     accuracy = model.get_accuracy()
-    print(f"Accuracy of scikit-learn Logistic Regression: {accuracy * 100:.2f}%")
+    print(f"Précision du modèle scikit-learn: {accuracy * 100:.2f}%")
     model.show_predictions_plt()
