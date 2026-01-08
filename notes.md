@@ -23,11 +23,50 @@
     - **Apports** : Compréhension profonde des mécanismes (sigmoïde pour la probabilité, gradient pour ajuster les poids), base pour extensions (CNN pour des images plus complexes, etc.).
     - **Améliorations possibles** : Ajouter early stopping (arrêter l'apprentissage tôt si ça ne s'améliore plus), tester d'autres régularisations (comme L1 pour simplifier le modèle), ou intégrer dans un pipeline ML (une chaîne d'outils automatisée).
 
+---
+
+## Interprétation des visualisations
+
+### 1. Comparaison des précisions (Bar Chart)
+- **Description** : Graphique à barres comparant les précisions des deux modèles (from-scratch vs scikit-learn).
+- **Interprétation** : Le modèle custom atteint **97%** de précision, proche des **99%** de scikit-learn. L'écart de 2% s'explique par les solveurs plus avancés de sklearn (`lbfgs`) et une optimisation plus poussée. Cette comparaison montre que notre implémentation from-scratch capture l'essentiel de la logique de régression logistique malgré sa simplicité.
+
+### 2. Prédictions sur échantillons (show_predictions_plt)
+- **Description** : Affichage de quelques images du dataset avec leurs prédictions par chaque modèle.
+- **Interprétation** : Permet de vérifier visuellement que les modèles prédisent correctement les chiffres. La plupart des prédictions sont exactes, ce qui confirme la bonne généralisation des modèles. Les erreurs visibles permettent d'identifier les cas difficiles (chiffres mal écrits, ambigus).
+
+### 3. Matrices de confusion
+- **Description** : Matrices montrant pour chaque classe réelle (ligne) combien de prédictions sont correctes (diagonal) ou erronées (hors diagonal).
+- **Interprétation** : 
+    - Les valeurs sur la diagonale indiquent les bonnes classifications (ex : tous les "0" correctement prédits comme "0").
+    - Les erreurs hors diagonale révèlent les confusions fréquentes (ex : certains "4" prédits comme "9", ou "3" confondus avec "8").
+    - Les deux modèles montrent des patterns d'erreurs similaires, confirmant que les limites viennent des données (similarités visuelles) plutôt que de l'algorithme.
+    - Une matrice bien concentrée sur la diagonale = bonne performance.
+
+### 4. Heatmaps des poids (patterns moyens)
+- **Description** : Visualisation des coefficients appris par chaque modèle pour chaque chiffre, organisés en grille 8×8 (forme des images).
+- **Interprétation** :
+    - **Rouge** (valeurs positives) : Pixels qui augmentent la probabilité d'appartenir à cette classe (zones importantes pour reconnaître le chiffre).
+    - **Bleu** (valeurs négatives) : Pixels qui diminuent cette probabilité (zones qui indiquent que ce n'est PAS ce chiffre).
+    - **Blanc** (proche de 0) : Pixels non informatifs pour cette classe.
+    - **Comparaison Custom vs Sklearn** : Les patterns sont similaires mais sklearn montre des poids plus contrastés et précis, résultat d'une optimisation plus fine.
+    - Exemple : Pour le chiffre "0", on voit du rouge au centre (forme ronde) et du bleu à l'extérieur. Pour "1", du rouge sur une ligne verticale.
+    - Ces heatmaps montrent que le modèle a bien appris les formes caractéristiques de chaque chiffre.
+
+### 5. Exemples de prédictions erronées
+- **Description** : Affichage des 5 premières erreurs du modèle custom avec la réalité vs la prédiction.
+- **Interprétation** :
+    - Permet d'analyser pourquoi le modèle échoue : chiffres mal formés, ambigus, ou pixelisés.
+    - Souvent, les erreurs sont compréhensibles même pour un humain (ex : un "9" écrit comme un "4").
+    - Identifie les limites du modèle linéaire : ne capture pas les variations complexes d'écriture manuscrite.
+    - Aide à comprendre qu'un modèle plus complexe (CNN) pourrait mieux gérer ces cas difficiles.
+
+---
 
 # Sources:
 - https://scikit-learn.org/0.17/modules/generated/sklearn.datasets.load_digits.html
 - https://stackoverflow.com/questions/3823752/display-image-as-grayscale (bug affichage)
 - https://www.youtube.com/watch?v=2ztuQKtW7So
--cours
+- cours
 - td5 (ex 2 regression linéaire)
 - doc matplotlib
