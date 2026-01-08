@@ -14,6 +14,10 @@ custom_model.fit()
 custom_model.show_predictions_plt()
 sklearn_model.show_predictions_plt()
 
+# Là on affiche les matrices de confusion pour voir les performances des deux modèles
+custom_model.confusion_matrix_display()
+sklearn_model.confusion_matrix_display()
+
 # Calculer les précisions
 accuracy_custom = custom_model.get_accuracy()
 accuracy_sklearn = sklearn_model.get_accuracy()
@@ -38,7 +42,7 @@ errors = np.where(predictions_custom != custom_model.digits.target)[0][:5]
 fig, axes = plt.subplots(1, 5)
 for i, idx in enumerate(errors):
     axes[i].imshow(custom_model.digits.images[idx], cmap='gray')
-    axes[i].set_title(f'Vrai: {custom_model.digits.target[idx]}\nPred: {predictions_custom[idx]}')
+    axes[i].set_title(f'Réalité: {custom_model.digits.target[idx]}\nPrédiction: {predictions_custom[idx]}')
     axes[i].axis('off')
 plt.suptitle('Exemples de prédictions erronées')
 plt.show()
