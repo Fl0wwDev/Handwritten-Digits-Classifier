@@ -12,7 +12,6 @@ class NeuralNetworkCustom:
         self.digits_target = digits_target
         self.image_shape = image_shape
         self.epochs = epochs
-        # Build a minimal neural network
         self.model = Sequential([
             Flatten(input_shape=image_shape),
             Dense(16, activation='relu'),
