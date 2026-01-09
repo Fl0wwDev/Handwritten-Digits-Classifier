@@ -21,44 +21,52 @@ class LogisticRegressionCustom:
         self.image_shape = image_shape
         self.x_normalized = self.scaler.fit_transform(self.digits_data)
 
-    def sigmoid(self, z):
-        return 1 / (1 + np.exp(-z))
+    def softmax(self, z):
+        exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))  # For numerical stability
+        return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 
     def gradient_descent_update(self, params, data):
         x, y = data
-        weights = params[:-1]
-        bias = params[-1]
+        n_classes = 10
+        n_features = x.shape[1]
+        weights = params[:n_features * n_classes].reshape(n_features, n_classes)
+        biases = params[n_features * n_classes:]
         
         m = x.shape[0]
-        sigma = self.sigmoid(np.dot(x, weights) + bias)
-        dW = 1/m * np.dot(x.T, (sigma - y))
-        db = 1/m * np.sum(sigma - y)
+        logits = np.dot(x, weights) + biases
+        probs = self.softmax(logits)
         
-        dW += self.lambda_reg * weights
+        y_onehot = np.zeros((m, n_classes))
+        y_onehot[np.arange(m), y] = 1
         
-        return np.concatenate([dW, [db]]), None
+        dW = (1/m) * np.dot(x.T, (probs - y_onehot))
+        db = (1/m) * np.sum(probs - y_onehot, axis=0)
+        
+        dW += self.lambda_reg * weights #test ajout régularisation
+        
+        return np.concatenate([dW.flatten(), db]), None
 
     def optimize(self, x, y):
-        initial_point = np.concatenate([np.zeros(x.shape[1]), [0.0]])
+        n_features = x.shape[1]
+        n_classes = 10
+        initial_point = np.concatenate([np.zeros(n_features * n_classes), np.zeros(n_classes)])
         
         gd = GradientDescent(gradient=self.gradient_descent_update, learning_rate=self.learning_rate, 
                              max_iterations=self.max_iterations, epsilon=self.epsilon, batch_size=self.batch_size)
         optimized_params = gd.descent(initial_point=initial_point, data=(x, y))
         
-        return optimized_params[:-1], optimized_params[-1]
+        weights = optimized_params[:n_features * n_classes].reshape(n_features, n_classes)
+        biases = optimized_params[n_features * n_classes:]
+        return weights, biases
 
     def fit(self):
-        for digit in range(10):
-            print(f"Entraînement pour le chiffre {digit}...")
-            y_binary = (self.digits_target == digit).astype(int)
-            weights, bias = self.optimize(self.x_normalized, y_binary)
-            self.all_weights.append(weights)
-            self.all_biases.append(bias)
+        print("Entraînement du modèle multiclasse avec softmax...")
+        self.all_weights, self.all_biases = self.optimize(self.x_normalized, self.digits_target)
 
     def predict(self, x):
-        probabilities = [self.sigmoid(np.dot(x, w) + b) for w, b in zip(self.all_weights, self.all_biases)]
-        probabilities = np.array(probabilities).T
-        return np.argmax(probabilities, axis=1)
+        logits = np.dot(x, self.all_weights) + self.all_biases
+        probs = self.softmax(logits)
+        return np.argmax(probs, axis=1)
 
     def get_accuracy(self):
         predictions = self.predict(self.x_normalized)

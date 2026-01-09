@@ -21,7 +21,7 @@ def load_mnist_data():
     digits_data = x_train.reshape(-1, 28*28)
     digits_target = y_train
     image_shape = (28, 28)
-    max_iter = 1
+    max_iter = 5000
     return dataset, digits_data, digits_target, image_shape, max_iter
 
 if int(choice) == 1:
@@ -73,7 +73,7 @@ fig, axes = plt.subplots(2, 10, figsize=(25, 8))
 
 for digit in range(10):
     # Modèle custom
-    weights_custom = custom_model.all_weights[digit].reshape(image_shape)
+    weights_custom = custom_model.all_weights[:, digit].reshape(image_shape)
     vmin = -max(np.abs(weights_custom).max(), np.abs(sklearn_model.model.coef_[digit]).max())
     vmax = -vmin
     im1 = axes[0, digit].imshow(weights_custom, cmap='RdBu', vmin=vmin, vmax=vmax)
