@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class LogisticRegressionCustom:
-    def __init__(self, learning_rate=0.1, max_iterations=1000, epsilon=1e-6, batch_size=32, lambda_reg=0.01):
+    def __init__(self, learning_rate=0.1, max_iterations=1000, epsilon=1e-6, batch_size=32, lambda_reg=0.01, dataset=load_digits(), digits_data=load_digits().data, digits_target=load_digits().target, image_shape=(8, 8)):
         self.learning_rate = learning_rate
         self.max_iterations = max_iterations
         self.epsilon = epsilon
@@ -15,8 +15,11 @@ class LogisticRegressionCustom:
         self.all_weights = []
         self.all_biases = []
         self.scaler = StandardScaler()
-        self.digits = load_digits()
-        self.x_normalized = self.scaler.fit_transform(self.digits.data)
+        self.digits = dataset
+        self.digits_data = digits_data
+        self.digits_target = digits_target
+        self.image_shape = image_shape
+        self.x_normalized = self.scaler.fit_transform(self.digits_data)
 
     def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
@@ -47,7 +50,7 @@ class LogisticRegressionCustom:
     def fit(self):
         for digit in range(10):
             print(f"Entraînement pour le chiffre {digit}...")
-            y_binary = (self.digits.target == digit).astype(int)
+            y_binary = (self.digits_target == digit).astype(int)
             weights, bias = self.optimize(self.x_normalized, y_binary)
             self.all_weights.append(weights)
             self.all_biases.append(bias)
@@ -59,26 +62,30 @@ class LogisticRegressionCustom:
 
     def get_accuracy(self):
         predictions = self.predict(self.x_normalized)
-        return np.mean(predictions == self.digits.target)
+        return np.mean(predictions == self.digits_target)
     
     def show_predictions_plt(self, num_samples=10):
-        sample_indices = np.random.choice(len(self.digits.data), num_samples, replace=False)
-        samples = self.digits.data[sample_indices]
-        true_labels = self.digits.target[sample_indices]
-        predicted_labels = self.predict(self.scaler.transform(samples))
-        
-        plt.figure(figsize=(10, 4))
-        for i, index in enumerate(sample_indices):
-            plt.subplot(2, num_samples // 2, i + 1)
-            plt.imshow(self.digits.images[index], cmap='gray')
-            plt.title(f'Réalité: {true_labels[i]}\nPrédiction: {predicted_labels[i]}')
-            plt.axis('off')
-        plt.tight_layout()
-        plt.show()
+            sample_indices = np.random.choice(len(self.digits_data), num_samples, replace=False)
+            samples = self.digits_data[sample_indices]
+            true_labels = self.digits_target[sample_indices]
+            predicted_labels = self.predict(self.scaler.transform(samples))
+            
+            plt.figure(figsize=(10, 4))
+            for i, index in enumerate(sample_indices):
+                plt.subplot(2, num_samples // 2, i + 1)
+                if hasattr(self.digits, 'images'):  # For load_digits
+                    image = self.digits.images[index]
+                else:
+                    image = self.digits_data[index].reshape(self.image_shape)
+                plt.imshow(image, cmap='gray')
+                plt.title(f'Réalité: {true_labels[i]}\nPrédiction: {predicted_labels[i]}')
+                plt.axis('off')
+            plt.tight_layout()
+            plt.show()
     
     def confusion_matrix_display(self):
-        predictions = self.predict(self.digits.data)
-        cm = confusion_matrix(self.digits.target, predictions)
+        predictions = self.predict(self.digits_data)
+        cm = confusion_matrix(self.digits_target, predictions)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=np.arange(10))
         disp.plot(cmap=plt.cm.Blues)
         plt.title('Matrice de confusion - Scikit-learn Logistic Regression')

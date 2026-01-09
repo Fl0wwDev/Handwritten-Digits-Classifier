@@ -2,13 +2,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 from regression_logistique import LogisticRegressionCustom
 from regression_sci_kit_learn import LogisticRegressionSklearn
+from sklearn.datasets import load_digits
+from tensorflow.keras.datasets import mnist
 
-custom_model = LogisticRegressionCustom()
-sklearn_model = LogisticRegressionSklearn()
+choice = input("\n--------------------------------\nChoisissez le dataset à utiliser \n 1- load_digits de sklearn.datasets (default) \n 2- mnist de tensorflow.keras.datasets \n Choisir (1/2): ")
 
+def load_sklearn_digits_data():
+    dataset = load_digits()
+    digits_data = dataset.data
+    digits_target = dataset.target
+    image_shape = (8, 8)
+    max_iter = 10000
+    return dataset, digits_data, digits_target, image_shape, max_iter
+
+def load_mnist_data():
+    (x_train, y_train), _ = mnist.load_data()
+    dataset = (x_train, y_train)
+    digits_data = x_train.reshape(-1, 28*28)
+    digits_target = y_train
+    image_shape = (28, 28)
+    max_iter = 100
+    return dataset, digits_data, digits_target, image_shape, max_iter
+
+if int(choice) == 1:
+    dataset, digits_data, digits_target, image_shape, max_iter = load_sklearn_digits_data()
+elif int(choice) == 2:
+    dataset, digits_data, digits_target, image_shape, max_iter = load_mnist_data()
+else:
+    dataset, digits_data, digits_target, image_shape, max_iter = load_sklearn_digits_data()
+custom_model = LogisticRegressionCustom(max_iterations=max_iter, dataset=dataset, digits_data=digits_data, digits_target=digits_target, image_shape=image_shape)
+sklearn_model = LogisticRegressionSklearn(max_iterations=max_iter, dataset=dataset, digits_data=digits_data, digits_target=digits_target, image_shape=image_shape)
 # on entraîne le modèle from-scratch
 custom_model.fit()
-
 
 #--------------------------------------------------------------
 # Calculer les précisions
@@ -48,7 +73,7 @@ fig, axes = plt.subplots(2, 10, figsize=(25, 8))
 
 for digit in range(10):
     # Modèle custom
-    weights_custom = custom_model.all_weights[digit].reshape(8, 8)
+    weights_custom = custom_model.all_weights[digit].reshape(image_shape)
     vmin = -max(np.abs(weights_custom).max(), np.abs(sklearn_model.model.coef_[digit]).max())
     vmax = -vmin
     im1 = axes[0, digit].imshow(weights_custom, cmap='RdBu', vmin=vmin, vmax=vmax)
@@ -56,7 +81,7 @@ for digit in range(10):
     axes[0, digit].axis('off')
 
     # Modèle sklearn
-    weights_sklearn = sklearn_model.model.coef_[digit].reshape(8, 8)
+    weights_sklearn = sklearn_model.model.coef_[digit].reshape(image_shape)
     im2 = axes[1, digit].imshow(weights_sklearn, cmap='RdBu', vmin=vmin, vmax=vmax)
     axes[1, digit].set_title(f'Digit {digit}\nSklearn', fontsize=9)
     axes[1, digit].axis('off')
