@@ -22,7 +22,7 @@ def load_mnist_data():
     digits_data = x_train.reshape(-1, 28*28)
     digits_target = y_train
     image_shape = (28, 28)
-    max_iter = 1
+    max_iter = 100
     return dataset, digits_data, digits_target, image_shape, max_iter
 
 if int(choice) == 1:

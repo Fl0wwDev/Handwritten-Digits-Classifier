@@ -69,6 +69,8 @@
 Essaie avec des iterations beaucoup plus élevées (5000, 10000) mais process très lent
 - Neural network: précision assez basse, mais c'est une implémantation assez basique basée sur le cours de fouille de données sur le machine learning
 
+Je vous invite à consulter les images dans le dossier images pour voir différents cas
+
 # Sources:
 - https://scikit-learn.org/0.17/modules/generated/sklearn.datasets.load_digits.html
 - https://stackoverflow.com/questions/3823752/display-image-as-grayscale (bug affichage)
