@@ -77,22 +77,30 @@ neural_model.confusion_matrix_display()
 
 #--------------------------------------------------------------
 # Visualisation des poids appris par les trois modèles pour voir les patterns moyens appris pour chaque chiffre
-fig, axes = plt.subplots(2, 10, figsize=(25, 8))
+fig, axes = plt.subplots(3, 10, figsize=(25, 12))
 
 for digit in range(10):
-    # Modèle custom
+    # custom
     weights_custom = custom_model.all_weights[:, digit].reshape(image_shape)
-    vmin = -max(np.abs(weights_custom).max(), np.abs(sklearn_model.model.coef_[digit]).max())
+    # sklearn
+    weights_sklearn = sklearn_model.model.coef_[digit].reshape(image_shape)
+    # neural network
+    weights_neural = neural_model.model.layers[1].get_weights()[0][:, digit].reshape(image_shape)
+    
+    vmin = -max(np.abs(weights_custom).max(), np.abs(weights_sklearn).max(), np.abs(weights_neural).max())
     vmax = -vmin
+    
     im1 = axes[0, digit].imshow(weights_custom, cmap='RdBu', vmin=vmin, vmax=vmax)
     axes[0, digit].set_title(f'Digit {digit}\nCustom', fontsize=9)
     axes[0, digit].axis('off')
 
-    # Modèle sklearn
-    weights_sklearn = sklearn_model.model.coef_[digit].reshape(image_shape)
     im2 = axes[1, digit].imshow(weights_sklearn, cmap='RdBu', vmin=vmin, vmax=vmax)
     axes[1, digit].set_title(f'Digit {digit}\nSklearn', fontsize=9)
     axes[1, digit].axis('off')
+
+    im3 = axes[2, digit].imshow(weights_neural, cmap='RdBu', vmin=vmin, vmax=vmax)
+    axes[2, digit].set_title(f'Digit {digit}\nNeural Network', fontsize=9)
+    axes[2, digit].axis('off')
 
 plt.suptitle('Patterns moyens appris par les trois modèles', fontsize=14, y=0.98)
 plt.tight_layout()
