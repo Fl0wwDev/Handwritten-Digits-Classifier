@@ -63,6 +63,12 @@
 
 ---
 
+## Bonus
+
+- Rajout du dataset mnist: beaucoup plus lent car dataset de 60k image et image de 28x28, précision plus des prédictions alors que les images sont plus "détaillées"
+Essaie avec des iterations beaucoup plus élevées (5000, 10000) mais process très lent
+- Neural network: précision assez basse, mais c'est une implémantation assez basique basée sur le cours de fouille de données sur le machine learning
+
 # Sources:
 - https://scikit-learn.org/0.17/modules/generated/sklearn.datasets.load_digits.html
 - https://stackoverflow.com/questions/3823752/display-image-as-grayscale (bug affichage)
