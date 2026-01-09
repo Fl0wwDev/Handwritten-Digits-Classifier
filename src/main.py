@@ -12,7 +12,7 @@ def load_sklearn_digits_data():
     digits_data = dataset.data
     digits_target = dataset.target
     image_shape = (8, 8)
-    max_iter = 10000
+    max_iter = 1000
     return dataset, digits_data, digits_target, image_shape, max_iter
 
 def load_mnist_data():
@@ -21,7 +21,7 @@ def load_mnist_data():
     digits_data = x_train.reshape(-1, 28*28)
     digits_target = y_train
     image_shape = (28, 28)
-    max_iter = 100
+    max_iter = 1
     return dataset, digits_data, digits_target, image_shape, max_iter
 
 if int(choice) == 1:
@@ -94,11 +94,15 @@ plt.show()
 #--------------------------------------------------------------
 # exemple d'affichage de fois où le modèle custom s'est trompé
 predictions_custom = custom_model.predict(custom_model.x_normalized)
-errors = np.where(predictions_custom != custom_model.digits.target)[0][:5]
+errors = np.where(predictions_custom != custom_model.digits_target)[0][:5]
 fig, axes = plt.subplots(1, 5)
 for i, idx in enumerate(errors):
-    axes[i].imshow(custom_model.digits.images[idx], cmap='gray')
-    axes[i].set_title(f'Réalité: {custom_model.digits.target[idx]}\nPrédiction: {predictions_custom[idx]}')
+    if hasattr(custom_model.digits, 'images'):
+        image = custom_model.digits.images[idx]
+    else:
+        image = custom_model.digits_data[idx].reshape(image_shape)
+    axes[i].imshow(image, cmap='gray')
+    axes[i].set_title(f'Réalité: {custom_model.digits_target[idx]}\nPrédiction: {predictions_custom[idx]}')
     axes[i].axis('off')
 plt.suptitle('Exemples de prédictions erronées')
 plt.show()
