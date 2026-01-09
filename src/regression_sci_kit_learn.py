@@ -31,7 +31,7 @@ class LogisticRegressionSklearn:
         true_labels = self.digits_target[sample_indices]
         predicted_labels = self.predict(samples)
         
-        plt.figure(figsize=(10, 4))
+        plt.figure(figsize=(15, 6))
         for i, index in enumerate(sample_indices):
             plt.subplot(2, num_samples // 2, i + 1)
             if hasattr(self.digits, 'images'):
@@ -41,6 +41,7 @@ class LogisticRegressionSklearn:
             plt.imshow(image, cmap='gray')
             plt.title(f'Réalité: {true_labels[i]}\nPrédiction: {predicted_labels[i]}')
             plt.axis('off')
+        plt.suptitle('Prédictions du modèle scikit-learn')
         plt.tight_layout()
         plt.show()
 

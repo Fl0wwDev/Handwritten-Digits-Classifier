@@ -78,7 +78,7 @@ class LogisticRegressionCustom:
         true_labels = self.digits_target[sample_indices]
         predicted_labels = self.predict(self.scaler.transform(samples))
         
-        plt.figure(figsize=(10, 4))
+        plt.figure(figsize=(15, 6))
         for i, index in enumerate(sample_indices):
             plt.subplot(2, num_samples // 2, i + 1)
             if hasattr(self.digits, 'images'):  # For load_digits
@@ -88,6 +88,7 @@ class LogisticRegressionCustom:
             plt.imshow(image, cmap='gray')
             plt.title(f'Réalité: {true_labels[i]}\nPrédiction: {predicted_labels[i]}')
             plt.axis('off')
+        plt.suptitle('Prédictions du modèle from-scratch')
         plt.tight_layout()
         plt.show()
     
