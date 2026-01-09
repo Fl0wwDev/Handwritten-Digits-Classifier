@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from regression_logistique import LogisticRegressionCustom
 from regression_sci_kit_learn import LogisticRegressionSklearn
+from neural_network import NeuralNetworkCustom
 from sklearn.datasets import load_digits
 from tensorflow.keras.datasets import mnist
 
@@ -21,7 +22,7 @@ def load_mnist_data():
     digits_data = x_train.reshape(-1, 28*28)
     digits_target = y_train
     image_shape = (28, 28)
-    max_iter = 5000
+    max_iter = 1
     return dataset, digits_data, digits_target, image_shape, max_iter
 
 if int(choice) == 1:
@@ -30,23 +31,28 @@ elif int(choice) == 2:
     dataset, digits_data, digits_target, image_shape, max_iter = load_mnist_data()
 else:
     dataset, digits_data, digits_target, image_shape, max_iter = load_sklearn_digits_data()
+
 custom_model = LogisticRegressionCustom(max_iterations=max_iter, dataset=dataset, digits_data=digits_data, digits_target=digits_target, image_shape=image_shape)
 sklearn_model = LogisticRegressionSklearn(max_iterations=max_iter, dataset=dataset, digits_data=digits_data, digits_target=digits_target, image_shape=image_shape)
+neural_model = NeuralNetworkCustom(dataset=dataset, digits_data=digits_data, digits_target=digits_target, image_shape=image_shape)
 # on entraîne le modèle from-scratch
 custom_model.fit()
+neural_model.fit()
 
 #--------------------------------------------------------------
 # Calculer les précisions
 accuracy_custom = custom_model.get_accuracy()
 accuracy_sklearn = sklearn_model.get_accuracy()
+accuracy_neural = neural_model.get_accuracy()
 
 print(f"Précision modèle from-scratch: {accuracy_custom * 100:.2f}%")
 print(f"Précision scikit-learn: {accuracy_sklearn * 100:.2f}%")
+print(f"Précision Neural Network: {accuracy_neural * 100:.2f}%")
 
-# Différence de précision entre les deux modèles
-labels = ['From-scratch', 'Scikit-learn']
-accuracies = [accuracy_custom, accuracy_sklearn]
-plt.bar(labels, accuracies, color=['blue', 'green'])
+# Différence de précision entre les trois modèles
+labels = ['From-scratch', 'Scikit-learn', 'Neural Network']
+accuracies = [accuracy_custom, accuracy_sklearn, accuracy_neural]
+plt.bar(labels, accuracies, color=['blue', 'green', 'red'])
 plt.ylabel('Précision')
 plt.title('Comparaison des précisions')
 plt.ylim(0, 1)
@@ -59,16 +65,18 @@ plt.show()
 # Ici le but c'est d'afficher des visualisations pour voir si les modèles ont bien prédit ou pas
 custom_model.show_predictions_plt()
 sklearn_model.show_predictions_plt()
+neural_model.show_predictions_plt()
 
 
 #--------------------------------------------------------------
-# Là on affiche les matrices de confusion pour voir les performances des deux modèles
+# Là on affiche les matrices de confusion pour voir les performances des trois modèles
 custom_model.confusion_matrix_display()
 sklearn_model.confusion_matrix_display()
+neural_model.confusion_matrix_display()
 
 
 #--------------------------------------------------------------
-# Visualisation des poids appris par les deux modèles pour voir les patterns moyens appris pour chaque chiffre
+# Visualisation des poids appris par les trois modèles pour voir les patterns moyens appris pour chaque chiffre
 fig, axes = plt.subplots(2, 10, figsize=(25, 8))
 
 for digit in range(10):
@@ -86,7 +94,7 @@ for digit in range(10):
     axes[1, digit].set_title(f'Digit {digit}\nSklearn', fontsize=9)
     axes[1, digit].axis('off')
 
-plt.suptitle('Patterns moyens appris par les deux modèles', fontsize=14, y=0.98)
+plt.suptitle('Patterns moyens appris par les trois modèles', fontsize=14, y=0.98)
 plt.tight_layout()
 plt.show()
 
