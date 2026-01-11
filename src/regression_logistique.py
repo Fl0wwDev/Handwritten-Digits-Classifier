@@ -97,7 +97,7 @@ class LogisticRegressionCustom:
         cm = confusion_matrix(self.digits_target, predictions)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=np.arange(10))
         disp.plot(cmap=plt.cm.Blues)
-        plt.title('Matrice de confusion - Scikit-learn Logistic Regression')
+        plt.title('Matrice de confusion - Custom Logistic Regression')
         plt.show()
 
 if __name__ == "__main__":
